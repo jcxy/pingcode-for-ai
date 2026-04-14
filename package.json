@@ -1,5 +1,5 @@
 {
-  "name": "pingcode-for-ai",
+  "name": "@cvtoolman/pingcode-for-ai",
   "version": "0.1.0",
   "description": "PingCode MCP Server and CLI for AI tools",
   "type": "module",
@@ -11,6 +11,9 @@
   "engines": {
     "node": ">=18.0.0"
   },
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
