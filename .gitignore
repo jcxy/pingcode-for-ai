@@ -1,0 +1,5 @@
+node_modules/
+dist/
+.env
+.pingcode_token.json
+*.tsbuildinfo
