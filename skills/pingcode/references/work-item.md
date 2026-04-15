@@ -3,7 +3,7 @@
 ## 列出工作项
 
 ```bash
-pingcode-for-ai work-item list [选项]
+pingcode-cli work-item list [选项]
 ```
 
 | 参数 | 说明 |
@@ -18,7 +18,7 @@ pingcode-for-ai work-item list [选项]
 ## 获取工作项详情
 
 ```bash
-pingcode-for-ai work-item get <work_item_id> [--format json]
+pingcode-cli work-item get <work_item_id> [--format json]
 ```
 
 返回：编号、标题、类型、状态、优先级、负责人、迭代、描述。
@@ -26,7 +26,7 @@ pingcode-for-ai work-item get <work_item_id> [--format json]
 ## 创建工作项
 
 ```bash
-pingcode-for-ai work-item create [选项]
+pingcode-cli work-item create [选项]
 ```
 
 | 参数 | 必填 | 说明 |
@@ -43,19 +43,19 @@ pingcode-for-ai work-item create [选项]
 ## 搜索工作项
 
 ```bash
-pingcode-for-ai work-item search <keyword> [--project-ids <ids>] [--page-index <n>] [--page-size <n>] [--format json]
+pingcode-cli work-item search <keyword> [--project-ids <ids>] [--page-index <n>] [--page-size <n>] [--format json]
 ```
 
 ## 列出工作项评论
 
 ```bash
-pingcode-for-ai work-item comment-list <work_item_id> [--format json]
+pingcode-cli work-item comment-list <work_item_id> [--format json]
 ```
 
 ## 添加评论
 
 ```bash
-pingcode-for-ai work-item comment-add <work_item_id> --content "<评论内容>"
+pingcode-cli work-item comment-add <work_item_id> --content "<评论内容>"
 ```
 
 ### @mention 格式
@@ -68,4 +68,4 @@ pingcode-for-ai work-item comment-add <work_item_id> --content "<评论内容>"
 
 示例：`请 <at abc123>张三</at> 确认验收标准`
 
-需要先通过 `pingcode-for-ai user me --format json` 查找目标用户的 ID。
+需要先通过 `pingcode-cli user me --format json` 查找目标用户的 ID。

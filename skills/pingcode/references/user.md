@@ -3,7 +3,7 @@
 ## 获取当前用户信息
 
 ```bash
-pingcode-for-ai user me [--format json]
+pingcode-cli user me [--format json]
 ```
 
 返回：用户 ID、用户名、邮箱、手机。

@@ -1,12 +1,12 @@
 {
-  "name": "@cvtoolman/pingcode-for-ai",
-  "version": "0.1.0",
-  "description": "PingCode MCP Server and CLI for AI tools",
+  "name": "@cvtoolman/pingcode-cli",
+  "version": "0.2.0",
+  "description": "PingCode CLI - 通过命令行操作 PingCode，配合 Skill 文件为 AI 编程工具提供项目管理能力",
   "type": "module",
   "main": "dist/client/index.js",
   "types": "dist/client/index.d.ts",
   "bin": {
-    "pingcode-for-ai": "dist/cli/index.js"
+    "pingcode-cli": "dist/cli/index.js"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -17,14 +17,11 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
-    "lint": "tsc --noEmit",
-    "start:server": "node dist/server/index.js"
+    "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.0",
     "commander": "^12.0.0",
-    "dotenv": "^16.4.0",
-    "zod": "^3.23.0"
+    "dotenv": "^16.4.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

@@ -116,7 +116,7 @@ export class PingCodeClient {
         const lower = text.toLowerCase();
         if (lower.includes('token') || lower.includes('unauthorized') || lower.includes('forbidden')) {
           throw new AuthenticationError(
-            '认证失败：访问令牌无效或已过期\n\n请尝试以下步骤：\n1. 运行 \'pingcode-for-ai auth status\' 检查当前认证状态\n2. 运行 \'pingcode-for-ai auth login --mode client\' 重新获取企业令牌\n3. 或运行 \'pingcode-for-ai auth login --mode user\' 使用授权码模式登录'
+            '认证失败：访问令牌无效或已过期\n\n请尝试以下步骤：\n1. 运行 \'pingcode-cli auth status\' 检查当前认证状态\n2. 运行 \'pingcode-cli auth login\' 重新登录'
           );
         }
       }

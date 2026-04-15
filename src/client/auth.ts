@@ -129,15 +129,14 @@ export class PingCodeAuth {
   async getToken(): Promise<string> {
     if (!this.accessToken) {
       if (this.authMode === 'user') {
-        const authorizeUrl = this.getAuthorizeUrl();
         throw new Error(
-          `当前为授权码模式，但未找到有效令牌。\n\n请先登录：\n  1. 在浏览器打开: ${authorizeUrl}\n  2. 登录并授权\n  3. 从回调地址中复制 code 参数\n  4. 运行: pingcode-for-ai auth login --code <授权码>`
+          `当前为授权码模式，但未找到有效令牌。\n\n请运行 pingcode-cli auth login 重新登录`
         );
       } else {
         if (this.clientId && this.clientSecret) {
           await this.getClientToken();
         } else {
-          throw new Error('未配置认证信息。请在 .env 中配置：\n  PINGCODE_CLIENT_ID=xxx\n  PINGCODE_CLIENT_SECRET=xxx');
+          throw new Error('未配置认证信息。请运行 pingcode-cli auth login 进行配置');
         }
       }
     }
@@ -149,9 +148,8 @@ export class PingCodeAuth {
       } else if (this.authMode === 'client') {
         await this.getClientToken();
       } else {
-        const authorizeUrl = this.getAuthorizeUrl();
         throw new Error(
-          `用户令牌已过期且无 refresh_token。\n请重新获取授权码：\n  1. 在浏览器打开: ${authorizeUrl}\n  2. 登录并授权\n  3. 运行: pingcode-for-ai auth login --code <授权码>`
+          `用户令牌已过期且无 refresh_token。\n请运行 pingcode-cli auth login 重新登录`
         );
       }
     }

@@ -5,6 +5,7 @@
 
 import { Command } from 'commander';
 import { applyGlobalConfigToEnv } from './config-store.js';
+import { ensureAuthorized } from './setup.js';
 import { authCommand } from './commands/auth.js';
 import { userCommand } from './commands/user.js';
 import { workItemCommand } from './commands/work-item.js';
@@ -13,10 +14,9 @@ import { wikiCommand } from './commands/wiki.js';
 import { projectCommand } from './commands/project.js';
 
 // 将全局配置（~/.pingcode/config.json）注入环境变量
-// 优先级：环境变量 / .env > 全局配置
 applyGlobalConfigToEnv();
 
-const program = new Command('pingcode-for-ai')
+const program = new Command('pingcode-cli')
   .description('PingCode CLI - 命令行操作 PingCode')
   .version('0.1.0');
 
@@ -27,4 +27,24 @@ program.addCommand(sprintCommand);
 program.addCommand(wikiCommand);
 program.addCommand(projectCommand);
 
-program.parse();
+// auth 相关子命令不需要预检查授权（避免死循环）
+const AUTH_COMMANDS = ['auth', 'help', '--help', '-h', '--version', '-V'];
+
+async function main() {
+  const args = process.argv.slice(2);
+  const firstArg = args[0];
+
+  // 非 auth/help 命令时，先检查授权状态
+  if (!firstArg || !AUTH_COMMANDS.includes(firstArg)) {
+    try {
+      await ensureAuthorized();
+    } catch (e: any) {
+      console.error(`授权检查失败: ${e.message}`);
+      process.exit(1);
+    }
+  }
+
+  program.parse();
+}
+
+main();

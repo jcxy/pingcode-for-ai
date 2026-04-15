@@ -3,7 +3,7 @@
 ## 列出迭代
 
 ```bash
-pingcode-for-ai sprint list --project-id <id> [选项]
+pingcode-cli sprint list --project-id <id> [选项]
 ```
 
 | 参数 | 必填 | 说明 |
@@ -18,7 +18,7 @@ pingcode-for-ai sprint list --project-id <id> [选项]
 ## 获取迭代详情
 
 ```bash
-pingcode-for-ai sprint get <sprint_id> --project-id <id> [--format json]
+pingcode-cli sprint get <sprint_id> --project-id <id> [--format json]
 ```
 
 返回：ID、名称、状态、开始时间、结束时间、负责人、描述。

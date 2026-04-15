@@ -10,10 +10,8 @@
 
 | 库 | 用途 |
 |---|------|
-| `@modelcontextprotocol/sdk` | MCP Server SDK |
 | `commander` | CLI 框架 |
 | `dotenv` | 加载 `.env` 配置文件 |
-| `zod` | 数据校验 |
 
 ## 开发依赖
 
@@ -26,16 +24,14 @@
 ## 构建系统
 
 - `tsc` 编译到 `dist/` 目录
-- 包名：`pingcode-for-ai`，版本 `0.1.0`
-- CLI 入口：`dist/cli/index.js`（bin: `pingcode-for-ai`）
-- MCP Server 入口：`dist/server/index.js`
+- 包名：`@cvtoolman/pingcode-cli`
+- CLI 入口：`dist/cli/index.js`（bin: `pingcode-cli`）
 
 ## 环境配置
 
-- 项目根目录的 `.env` 文件（从 `.env.example` 复制）
-- 必填变量：`PINGCODE_API_ROOT`、`PINGCODE_CLIENT_ID`、`PINGCODE_CLIENT_SECRET`
-- 可选变量：`PINGCODE_ORG_ID`、`PINGCODE_PRODUCT_ID`
-- 令牌缓存：`.pingcode_token.json`（自动管理，已加入 gitignore）
+- 全局配置：`~/.pingcode/config.json`（首次使用时交互式引导创建）
+- 全局令牌：`~/.pingcode/token.json`
+- 项目级 `.env` 文件可覆盖全局配置（优先级更高）
 
 ## 常用命令
 
@@ -49,18 +45,17 @@ npm test
 # 类型检查
 npm run lint
 
-# 启动 MCP Server
-npm run start:server
-
-# 使用 CLI
+# 使用 CLI（开发时）
 node dist/cli/index.js --help
-# 或 npm link 后：
-pingcode-for-ai --help
-pingcode-for-ai work-item list --project-ids <id>
-pingcode-for-ai user me
-pingcode-for-ai wiki space-list
-pingcode-for-ai sprint list --project-id <id>
-pingcode-for-ai project list
-pingcode-for-ai project get <id>
-pingcode-for-ai work-item comment-list <id>
+
+# 全局安装后
+pingcode-cli --help
+pingcode-cli auth login
+pingcode-cli auth status
+pingcode-cli auth config
+pingcode-cli work-item list --project-ids <id>
+pingcode-cli user me
+pingcode-cli wiki space-list
+pingcode-cli sprint list --project-id <id>
+pingcode-cli project list
 ```
