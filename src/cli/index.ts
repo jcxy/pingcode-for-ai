@@ -5,7 +5,7 @@
 
 import { Command } from 'commander';
 import { applyGlobalConfigToEnv } from './config-store.js';
-import { ensureAuthorized } from './setup.js';
+import { ensureAuthorized, interactiveSetup } from './setup.js';
 import { authCommand } from './commands/auth.js';
 import { userCommand } from './commands/user.js';
 import { workItemCommand } from './commands/work-item.js';
@@ -34,8 +34,19 @@ async function main() {
   const args = process.argv.slice(2);
   const firstArg = args[0];
 
+  // 无参数时：进入交互式引导流程，不打印帮助
+  if (!firstArg) {
+    try {
+      await interactiveSetup();
+    } catch (e: any) {
+      console.error(`配置失败: ${e.message}`);
+      process.exit(1);
+    }
+    return;
+  }
+
   // 非 auth/help 命令时，先检查授权状态
-  if (!firstArg || !AUTH_COMMANDS.includes(firstArg)) {
+  if (!AUTH_COMMANDS.includes(firstArg)) {
     try {
       await ensureAuthorized();
     } catch (e: any) {

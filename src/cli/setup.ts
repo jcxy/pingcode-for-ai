@@ -40,6 +40,7 @@ async function promptChoice(question: string, choices: string[]): Promise<number
 
 /**
  * 检查是否有有效的令牌
+ * 会同时验证令牌的 auth_mode 与当前配置的 authMode 是否匹配
  */
 function hasValidToken(): boolean {
   const store = new TokenStore(GLOBAL_TOKEN_FILE);
@@ -47,6 +48,10 @@ function hasValidToken(): boolean {
   if (!data || !data.access_token) return false;
   // 检查是否过期（提前 1 天判定为过期）
   if (data.expires_at && Date.now() / 1000 >= data.expires_at - 86400) return false;
+  // 检查 auth_mode 是否与当前配置匹配（与 PingCodeAuth._loadTokens 逻辑一致）
+  const config = loadGlobalConfig();
+  const currentMode = config.authMode || (process.env.PINGCODE_AUTH_MODE as string) || 'client';
+  if (data.auth_mode && data.auth_mode !== currentMode) return false;
   return true;
 }
 
@@ -169,6 +174,62 @@ export async function ensureAuthorized(): Promise<void> {
   } else {
     await setupAuthorizationCode();
   }
+}
+
+/**
+ * 交互式引导入口（用户直接输入 pingcode-cli 不带参数时调用）
+ *
+ * 与 ensureAuthorized 不同：
+ * - 始终显示欢迎信息和当前配置状态
+ * - 已配置的项跳过，未配置的项引导配置
+ * - 已有有效令牌时提示当前状态，询问是否重新配置
+ */
+export async function interactiveSetup(): Promise<void> {
+  console.log('╔══════════════════════════════════════╗');
+  console.log('║     欢迎使用 PingCode CLI 工具       ║');
+  console.log('╚══════════════════════════════════════╝');
+
+  const config = loadGlobalConfig();
+  const tokenValid = hasValidToken();
+  const creds = hasCredentials();
+
+  // 显示当前配置状态
+  console.log('\n当前配置状态：');
+  const apiRoot = config.apiRoot || process.env.PINGCODE_API_ROOT;
+  console.log(`  API 地址:   ${apiRoot ? `${apiRoot} ✓` : '未配置'}`);
+  console.log(`  客户端凭证: ${creds.hasClient ? '已配置 ✓' : '未配置'}`);
+  console.log(`  用户凭证:   ${creds.hasUser ? '已配置 ✓' : '未配置'}`);
+  console.log(`  认证令牌:   ${tokenValid ? '有效 ✓' : '无效或未获取'}`);
+
+  // 如果已经完全配置好，询问是否重新配置
+  if (tokenValid) {
+    console.log('\n当前认证状态正常，可以直接使用 CLI 命令。');
+    console.log('运行 pingcode-cli --help 查看可用命令。\n');
+    const answer = await prompt('是否要重新配置？(y/N): ');
+    if (answer.toLowerCase() !== 'y') {
+      return;
+    }
+    console.log('');
+  } else {
+    console.log('');
+  }
+
+  // 引导 API 地址配置（已配置则跳过）
+  await ensureApiRoot();
+
+  // 选择认证方式
+  const choice = await promptChoice('请选择认证方式：', [
+    '客户端凭证模式 — 使用 Client ID / Secret 直接获取令牌（推荐）',
+    '授权码模式 — 通过浏览器授权获取用户级令牌',
+  ]);
+
+  if (choice === 1) {
+    await setupClientCredentials();
+  } else {
+    await setupAuthorizationCode();
+  }
+
+  console.log('配置完成！运行 pingcode-cli --help 查看可用命令。');
 }
 
 export { GLOBAL_TOKEN_FILE };
