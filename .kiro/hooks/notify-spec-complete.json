@@ -1,0 +1,12 @@
+{
+  "name": "Spec 任务完成企微通知",
+  "version": "1.0.0",
+  "description": "当 spec 任务完成时，发送企微通知。使用前请将 WECHAT_WEBHOOK_URL 替换为你的企微机器人 webhook 地址",
+  "when": {
+    "type": "postTaskExecution"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "curl -s -X POST \"https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=YOUR_KEY_HERE\" -H \"Content-Type: application/json\" -d \"{\\\"msgtype\\\":\\\"text\\\",\\\"text\\\":{\\\"content\\\":\\\"✅ Kiro Spec 任务已完成\\n请查看执行结果\\\"}}\""
+  }
+}

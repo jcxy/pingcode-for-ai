@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(cc-connect --version)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\cvtoolman\\.cc-connect"
+    ]
+  },
+  "enabledPlugins": {
+    "agent-skills@addy-agent-skills": true
+  }
+}

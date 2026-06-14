@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -sL https://raw.githubusercontent.com/chenhg5/cc-connect/refs/heads/main/INSTALL.md)",
+      "Bash(kiro chat *)"
+    ]
+  },
+  "enabledPlugins": {
+    "agent-skills@addy-agent-skills": true
+  }
+}

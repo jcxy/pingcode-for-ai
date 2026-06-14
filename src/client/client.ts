@@ -115,9 +115,18 @@ export class PingCodeClient {
       if (res.status === 401 || res.status === 403) {
         const lower = text.toLowerCase();
         if (lower.includes('token') || lower.includes('unauthorized') || lower.includes('forbidden')) {
-          throw new AuthenticationError(
-            '认证失败：访问令牌无效或已过期\n\n请尝试以下步骤：\n1. 运行 \'pingcode-cli auth status\' 检查当前认证状态\n2. 运行 \'pingcode-cli auth login\' 重新登录'
-          );
+          let msg = '认证失败：访问令牌无效或已过期';
+          if (this.auth.authMode === 'client') {
+            msg += '\n\n当前使用的是客户端凭证模式（企业令牌）。部分接口（如 /v1/myself）需要用户级令牌。';
+            msg += '\n请尝试以下步骤：';
+            msg += '\n  1. 运行 pingcode-cli auth login，选择「授权码模式」获取用户令牌';
+            msg += '\n  2. 运行 pingcode-cli auth status 检查当前认证状态';
+          } else {
+            msg += '\n\n请尝试以下步骤：';
+            msg += '\n  1. 运行 pingcode-cli auth status 检查当前认证状态';
+            msg += '\n  2. 运行 pingcode-cli auth login 重新登录';
+          }
+          throw new AuthenticationError(msg);
         }
       }
       throw new ApiError(`API 请求失败: HTTP ${res.status}`, res.status, text);
