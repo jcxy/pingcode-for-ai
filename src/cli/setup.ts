@@ -223,6 +223,23 @@ export async function interactiveSetup(): Promise<void> {
     '授权码模式 — 通过浏览器授权获取用户级令牌',
   ]);
 
+  // 重新配置时清除对应模式的旧凭证，强制用户重新输入
+  if (tokenValid) {
+    if (choice === 1) {
+      delete config.clientId;
+      delete config.clientSecret;
+      saveGlobalConfig(config);
+      delete process.env.PINGCODE_CLIENT_ID;
+      delete process.env.PINGCODE_CLIENT_SECRET;
+    } else {
+      delete config.userClientId;
+      delete config.userClientSecret;
+      saveGlobalConfig(config);
+      delete process.env.PINGCODE_USER_CLIENT_ID;
+      delete process.env.PINGCODE_USER_CLIENT_SECRET;
+    }
+  }
+
   if (choice === 1) {
     await setupClientCredentials();
   } else {
